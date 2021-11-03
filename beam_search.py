@@ -52,7 +52,7 @@ def prefix_beam_search(alphabet, blank_index, ctc, keywords, beam_width=16, beta
 
                     # STEP 6: Make use of discarded prefixes
                     if l_plus not in A_prev:
-                        Pb[t][l_plus] += ctc[t][-1] * (Pb[t - 1][l_plus] + Pnb[t - 1][l_plus])
+                        Pb[t][l_plus] += ctc[t][blank_index] * (Pb[t - 1][l_plus] + Pnb[t - 1][l_plus])
                         Pnb[t][l_plus] += ctc[t][c_ix] * Pnb[t - 1][l_plus]
                     # END: STEP 6
 
