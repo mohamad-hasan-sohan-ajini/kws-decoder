@@ -51,3 +51,25 @@ python decoder_test.py
 The commands needed to the compilation and testing modules is placed in `compile.sh`.
 
 ---
+
+## Compile with make file
+
+After installing PyBind11 using pip, locate the configuration file by running the following command:
+
+```
+find /path/to/venv -name "pybind11Config.cmake"
+```
+
+Next, create a build directory and navigate into it. While inside the build directory, run:
+
+```bash
+cmake -Dpybind11_DIR=/output/of/above/command ..
+```
+
+Finally, to build the package, execute:
+
+```bash
+make
+```
+
+You will find the Python package in the build directory.
