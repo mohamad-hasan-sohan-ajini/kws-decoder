@@ -63,7 +63,7 @@ find /path/to/venv -name "pybind11Config.cmake"
 Next, create a build directory and navigate into it. While inside the build directory, run:
 
 ```bash
-cmake -Dpybind11_DIR=/output/of/above/command/till/pybind11/folder ..
+cmake -Dpybind11_DIR=/output/of/above/command/till/pybind11/folder -DPYTHON_VERSION=3.11 ..
 ```
 
 Finally, to build the package, execute:
