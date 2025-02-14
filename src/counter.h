@@ -8,18 +8,18 @@ using namespace std;
 
 class Counter
 {
-    map<string, float> counter;
+    map<u32string, float> counter;
 
     public:
-        map<string, float> get_counter();
-        void set_item(string, float);
-        float get_value(string);
-        void accumulate_prob(string, float);
-        vector<string> get_keys();
+        map<u32string, float> get_counter();
+        void set_item(u32string, float);
+        float get_value(u32string);
+        void accumulate_prob(u32string, float);
+        vector<u32string> get_keys();
         vector<float> get_normalized_probs(float beta);
-        float get_normalized_prob(float beta, string key);
+        float get_normalized_prob(float beta, u32string key);
         Counter operator+(Counter);
-        float operator[](string);
+        float operator[](u32string);
         void clear();
 };
 
