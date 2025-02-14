@@ -20,7 +20,7 @@ Trie::~Trie()
     delete root;
 }
 
-Node* Trie::inspect_children(Node* node, char ch)
+Node* Trie::inspect_children(Node* node, char32_t ch)
 {
     vector<Node*> children = node->get_children();
     for (long unsigned int i = 0; i < children.size(); i++)
@@ -35,7 +35,7 @@ Node* Trie::inspect_children(Node* node, char ch)
     return get_root();
 }
 
-void Trie::add_word(std::string word)
+void Trie::add_word(u32string word)
 {
     // cout<<"@add_word: "<<word<<endl;
     Node *tmp;
@@ -46,7 +46,7 @@ void Trie::add_word(std::string word)
         // cout<<"node char: "<<current_node->get_char()<<", char: "<<word[i]<<", result: "<<the_child<<endl;
         if (tmp == get_root())
         {
-            tmp = new Node(char(word[i]), false);
+            tmp = new Node(char32_t(word[i]), false);
             // cout<<"######### "<<tmp->get_char()<<" #########"<<endl;
             current_node->add_child(tmp);
             // cout<<"######### "<<tmp->get_char()<<" #########"<<endl;
@@ -56,7 +56,7 @@ void Trie::add_word(std::string word)
     current_node->set_is_word(true);
 }
 
-Node* Trie::traverse(std::string word)
+Node* Trie::traverse(u32string word)
 {
     Node* tmp;
     Node *current_node = get_root();
@@ -72,7 +72,7 @@ Node* Trie::traverse(std::string word)
     return current_node;
 }
 
-bool Trie::has_word(std::string word)
+bool Trie::has_word(u32string word)
 {
     Node* result = traverse(word);
     if (result == get_root())
@@ -82,7 +82,7 @@ bool Trie::has_word(std::string word)
     return result->get_is_word();
 }
 
-bool Trie::is_promising(std::string word)
+bool Trie::is_promising(u32string word)
 {
     Node* result = traverse(word);
     if (result == get_root())

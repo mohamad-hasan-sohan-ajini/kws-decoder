@@ -15,14 +15,14 @@ class Trie
         Trie();
         ~Trie();
 
-        void add_word(std::string);
-        bool has_word(std::string);
-        bool is_promising(std::string);
+        void add_word(u32string);
+        bool has_word(u32string);
+        bool is_promising(u32string);
 
     private:
         Node* get_root();
-        Node* inspect_children(Node*, char);
-        Node* traverse(std::string);
+        Node* inspect_children(Node*, char32_t);
+        Node* traverse(u32string);
 };
 
 #endif
