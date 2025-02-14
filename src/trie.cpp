@@ -15,6 +15,11 @@ Node* Trie::get_root()
     return root;
 }
 
+Trie::~Trie()
+{
+    delete root;
+}
+
 Node* Trie::inspect_children(Node* node, char ch)
 {
     vector<Node*> children = node->get_children();

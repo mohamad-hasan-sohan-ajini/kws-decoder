@@ -13,6 +13,7 @@ class Trie
 
     public:
         Trie();
+        ~Trie();
 
         void add_word(std::string);
         bool has_word(std::string);
