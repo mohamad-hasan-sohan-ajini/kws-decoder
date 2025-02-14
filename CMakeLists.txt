@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.6)
 project(kws_decoder)
 
+# Allow the user to specify the Python version
+set(PYTHON_VERSION "3.11" CACHE STRING "Python version to use (e.g., 3.11, 3.10, etc.)")
+
 # Find python version
 execute_process(
-    COMMAND python3.11-config --extension-suffix
+    COMMAND python${PYTHON_VERSION}-config --extension-suffix
     OUTPUT_VARIABLE PYTHON_EXTENSION_SUFFIX
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
