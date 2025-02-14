@@ -8,16 +8,16 @@ using namespace std;
 class Node
 {
     bool is_word;
-    char ch;
+    char32_t ch;
     vector<Node*> children;
 
     public:
         Node();
-        Node(char, bool);
+        Node(char32_t, bool);
 
         vector<Node*> get_children();
         void add_child(Node*);
-        char get_char();
+        char32_t get_char();
         bool get_is_word();
         void set_is_word(bool);
 };

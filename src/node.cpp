@@ -16,7 +16,7 @@ Node::Node()
     // cout<<endl<<"----------"<<endl;
 }
 
-Node::Node(char init_ch, bool init_is_word)
+Node::Node(char32_t init_ch, bool init_is_word)
 {
     ch = init_ch;
     is_word = init_is_word;
@@ -35,7 +35,7 @@ void Node::add_child(Node *node)
     // cout<<"num childs: "<<children.size()<<endl;
 }
 
-char Node::get_char()
+char32_t Node::get_char()
 {
     return ch;
 }
