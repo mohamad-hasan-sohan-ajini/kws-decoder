@@ -16,7 +16,7 @@ namespace py = pybind11;
 class KWSDecoder
 {
     Trie trie;
-    vector<char> alphabet;
+    vector<char32_t> alphabet;
     int blank_index;
     int alphabet_size;
     long unsigned int beam_width = 16;
@@ -27,10 +27,10 @@ class KWSDecoder
     int top_n = 10;
 
     public:
-        KWSDecoder(vector<char>, int);
+        KWSDecoder(vector<char32_t>, int);
 
-        void add_words(vector<string>);
-        map<string, vector<map<string, float>>> search(py::array_t<float>);
+        void add_words(vector<u32string>);
+        map<u32string, vector<map<u32string, float>>> search(py::array_t<float>);
 
     private:
         tuple<vector<int>, vector<vector<float>>> collapse(py::array_t<float>);

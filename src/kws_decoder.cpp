@@ -10,16 +10,16 @@
 using namespace std;
 namespace py = pybind11;
 
-KWSDecoder::KWSDecoder(vector<char> alphabet_, int blank_index_)
+KWSDecoder::KWSDecoder(vector<char32_t> alphabet_, int blank_index_)
 {
     alphabet = alphabet_;
     blank_index = blank_index_;
     alphabet_size = alphabet.size();
 }
 
-void KWSDecoder::add_words(vector<string> keywords)
+void KWSDecoder::add_words(vector<u32string> keywords)
 {
-    for (string keyword : keywords)
+    for (u32string keyword : keywords)
     {
         trie.add_word(keyword);
     }
@@ -96,27 +96,27 @@ tuple<vector<int>, vector<vector<float>>> KWSDecoder::collapse(py::array_t<float
     return make_tuple(cumsum_run_length, result);
 }
 
-map<string, vector<map<string, float>>> KWSDecoder::search(py::array_t<float> np_array)
+map<u32string, vector<map<u32string, float>>> KWSDecoder::search(py::array_t<float> np_array)
 {
     vector<int> cumsum_run_length;
     vector<vector<float>> collapsed_array;
     tie(cumsum_run_length, collapsed_array) = collapse(np_array);
 
     // create temporary variables
-    char ch;
+    char32_t ch;
     float tmp_prob, threshold_score, score, prob, char_prob_threshold;
-    string prefix_plus;
+    u32string prefix_plus;
     Counter A_next;
-    vector<string> A_next_keys;
+    vector<u32string> A_next_keys;
     vector<float> A_next_scores, char_probs;
     bool has_empty_string;
-    map<string, vector<map<string, float>>> results;
-    map<string, float> tmp_result;
+    map<u32string, vector<map<u32string, float>>> results;
+    map<u32string, float> tmp_result;
 
     // create variables
-    string empty_string = "";
+    u32string empty_string = U"";
     map<int, Counter> Pb, Pnb;
-    vector<string> A_prev;
+    vector<u32string> A_prev;
 
     // initiate defaults
     Pb[-1].set_item(empty_string, 1.0);
@@ -133,7 +133,7 @@ map<string, vector<map<string, float>>> KWSDecoder::search(py::array_t<float> np
         }
         sort(char_probs.begin(), char_probs.end(), greater<float>());
         char_prob_threshold = char_probs[top_n];
-        for (string prefix : A_prev)
+        for (u32string prefix : A_prev)
         {
             for (int char_index = 0; char_index < alphabet_size; char_index++)
             {
@@ -176,7 +176,7 @@ map<string, vector<map<string, float>>> KWSDecoder::search(py::array_t<float> np
         A_next.clear();
         A_next = Pb[t] + Pnb[t];
         A_next_keys.clear();
-        for (string key : A_next.get_keys())
+        for (u32string key : A_next.get_keys())
         {
             // compute sc ore
             score = A_next.get_normalized_prob(beta, key);
@@ -191,14 +191,14 @@ map<string, vector<map<string, float>>> KWSDecoder::search(py::array_t<float> np
             }
             if (trie.has_word(key))
             {
-                tmp_result["timestep"] = t;
-                tmp_result["score"] = score;
-                tmp_result["end"] = cumsum_run_length[t + 1];
+                tmp_result[U"timestep"] = t;
+                tmp_result[U"score"] = score;
+                tmp_result[U"end"] = cumsum_run_length[t + 1];
                 if (results[key].size() > 0)
                 {
-                    if (t - results[key].back()["timestep"] < max_gap)
+                    if (t - results[key].back()[U"timestep"] < max_gap)
                     {
-                        if (results[key].back()["score"] < score)
+                        if (results[key].back()[U"score"] < score)
                         {
                             results[key].pop_back();
                             results[key].push_back(tmp_result);
@@ -217,7 +217,7 @@ map<string, vector<map<string, float>>> KWSDecoder::search(py::array_t<float> np
         }
         // sort scores of promising prefixes
         A_next_scores.clear();
-        for (string key : A_next_keys)
+        for (u32string key : A_next_keys)
         {
             A_next_scores.push_back(A_next.get_normalized_prob(beta, key));
         }
@@ -227,7 +227,7 @@ map<string, vector<map<string, float>>> KWSDecoder::search(py::array_t<float> np
         // add top k to A_prev
         A_prev.clear();
         has_empty_string = false;
-        for (string key : A_next_keys)
+        for (u32string key : A_next_keys)
         {
             if (A_next.get_normalized_prob(beta, key) >= threshold_score)
             {

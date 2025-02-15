@@ -18,7 +18,7 @@ PYBIND11_MODULE(wrapper, m)
         .def("is_promising", &Trie::is_promising);
 
     py::class_<KWSDecoder>(m, "KWSDecoder")
-        .def(py::init<vector<char>, int>())
+        .def(py::init<vector<char32_t>, int>())
         .def("add_words", &KWSDecoder::add_words)
         .def("search", &KWSDecoder::search);
 }
