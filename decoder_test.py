@@ -3,7 +3,10 @@ import json
 import torch
 import numpy as np
 
-from wrapper import KWSDecoder
+try:
+    from build.wrapper import KWSDecoder
+except ImportError:
+    from wrapper import KWSDecoder
 from beam_search import prefix_beam_search
 
 with open('resources/labels.json') as f:
