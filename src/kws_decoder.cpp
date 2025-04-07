@@ -248,3 +248,93 @@ map<u32string, vector<map<u32string, float>>> KWSDecoder::search(py::array_t<flo
     // return
     return results;
 }
+
+vector<char32_t> KWSDecoder::get_alphabet()
+{
+    return alphabet;
+}
+
+int KWSDecoder::get_blank_index()
+{
+    return blank_index;
+}
+
+int KWSDecoder::get_alphabet_size()
+{
+    return alphabet_size;
+}
+
+long unsigned int KWSDecoder::get_beam_width()
+{
+    return beam_width;
+}
+
+float KWSDecoder::get_beta()
+{
+    return beta;
+}
+
+float KWSDecoder::get_min_keyword_score()
+{
+    return min_keyword_score;
+}
+
+int KWSDecoder::get_max_gap()
+{
+    return max_gap;
+}
+
+float KWSDecoder::get_min_clip()
+{
+    return min_clip;
+}
+
+int KWSDecoder::get_top_n()
+{
+    return top_n;
+}
+
+void KWSDecoder::set_alphabet(vector<char32_t>& new_alphabet)
+{
+    alphabet = new_alphabet;
+}
+
+void KWSDecoder::set_blank_index(int new_blank_index)
+{
+    blank_index = new_blank_index;
+}
+
+void KWSDecoder::set_alphabet_size(int new_alphabet_size)
+{
+    alphabet_size = new_alphabet_size;
+}
+
+void KWSDecoder::set_beam_width(long unsigned int new_beam_width)
+{
+    beam_width = new_beam_width;
+}
+
+void KWSDecoder::set_beta(float new_beta)
+{
+    beta = new_beta;
+}
+
+void KWSDecoder::set_min_keyword_score(float new_min_keyword_score)
+{
+    min_keyword_score = new_min_keyword_score;
+}
+
+void KWSDecoder::set_max_gap(int new_max_gap)
+{
+    max_gap = new_max_gap;
+}
+
+void KWSDecoder::set_min_clip(float new_min_clip)
+{
+    min_clip = new_min_clip;
+}
+
+void KWSDecoder::set_top_n(int new_top_n)
+{
+    top_n = new_top_n;
+}
