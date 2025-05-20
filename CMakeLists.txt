@@ -1,41 +1,24 @@
-cmake_minimum_required(VERSION 3.6)
-project(kws_decoder)
+cmake_minimum_required(VERSION 3.15)
+project(kws_decoder LANGUAGES CXX)
 
-# Allow the user to specify the Python version
-set(PYTHON_VERSION "3.11" CACHE STRING "Python version to use (e.g., 3.11, 3.10, etc.)")
+# Required for pybind11 to locate Python correctly
+find_package(pybind11 REQUIRED)
 
-# Find python version
-execute_process(
-    COMMAND python${PYTHON_VERSION}-config --extension-suffix
-    OUTPUT_VARIABLE PYTHON_EXTENSION_SUFFIX
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-# Find the Python package with pybind11
-find_package(pybind11 REQUIRED PATHS ${PB11})
-
-# Add the source files
+# List your C++ sources
 set(SOURCES
-    src/node.cpp
-    src/trie.cpp
-    src/counter.cpp
-    src/kws_decoder.cpp
-    src/wrapper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/node.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/trie.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/counter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/kws_decoder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/wrapper.cpp
 )
 
-# Create a shared library
-add_library(wrapper SHARED ${SOURCES})
+# Build the pybind11 module
+pybind11_add_module(wrapper ${SOURCES})
 
-# Set compiler options
-target_compile_options(wrapper PRIVATE -O3 -Wall -std=c++11 -fPIC)
+# Optimization flags (optional, handled by most toolchains anyway)
+target_compile_options(wrapper PRIVATE -O3 -Wall -fPIC)
 
-# Include pybind11 headers
-target_include_directories(wrapper PRIVATE ${pybind11_INCLUDE_DIRS})
-
-# Set the output name to wrapper without the lib prefix and .so suffix
-set_target_properties(wrapper PROPERTIES OUTPUT_NAME wrapper${PYTHON_EXTENSION_SUFFIX})
-set_target_properties(wrapper PROPERTIES PREFIX "")
-set_target_properties(wrapper PROPERTIES SUFFIX "")
-
-# Link against Python library
-target_link_libraries(wrapper PRIVATE ${pybind11_LIBRARIES})
+# Optional: Name the output module explicitly
+# (pybind11 usually handles this automatically with correct suffix)
+set_target_properties(wrapper PROPERTIES OUTPUT_NAME wrapper LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/kws_decoder")
