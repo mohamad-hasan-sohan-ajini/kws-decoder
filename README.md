@@ -1,21 +1,36 @@
 # Keyword Spotting Decoder
 
-Here is an implementation of Keyword Spotting (KWS) decoder in C++ language to speed up decoding in python using pybind11.
-KWS indeed is a simple beam search that searches for the desired keywords in a output that is come from acoustic model (AM).
-A sample of an acoustic model output is as follows, for the wav file wherein the speaker says: "AT ANY SECOND AND JUST GO AND THEN WATCH EVERYBODY'S MOUTH DROP I WILL NOT BE OVER"
+This repository provides a high-performance implementation of a Keyword Spotting (KWS) decoder in C++, designed to accelerate decoding in Python via pybind11.
+
+KWS is essentially a streamlined beam search algorithm that looks for specified keywords directly in the output of an acoustic model (AM). For example, consider the output from an acoustic model for a WAV file where the speaker says:
+"AT ANY SECOND AND JUST GO AND THEN WATCH EVERYBODY'S MOUTH DROP I WILL NOT BE OVER"
 
 ![Sample acoustic model output](tests/data/output.png)
 
-You can see the few first output timesteps of the acoustic model for the given text (for the sake of visibility).
+The image above shows the first few timesteps of the acoustic model's output for the given text (for clarity).
 
-## How to install
+There are two main approaches to searching for specific keywords in audio:
+1. **Transcribe the entire audio**: Convert all spoken words to text, then search for your keywords in the transcription.
+2. **Direct keyword search in the acoustic model output**: Search for keywords directly in the AM output.
 
-the module is available on pypi, so `pip install kws-decoder` is just fine.
+The first approach is prone to errors due to the influence of the language model (LM) during ASR decoding. The LM may alter the output to form more probable sentences, potentially causing actual spoken keywords to be missed or replaced with other words.
 
-### (Optional) run sample python implementation codes
+KWS addresses this issue by searching for your desired keywords directly in the acoustic model output, bypassing the language model and reducing the chance of missing keywords.
 
-The original code was developed on python. In order to the original implementation, install package like this:
-`pip install kws-decoder[ext]`
+## Installation
 
-It installs `pygtrie`, `torch`, and `tqdm`, that are necessary to run original implementation of the beam search algorithm.
-Then you can run the script with original python implementation located in test folder, "beam_search.py" more specifically.
+The module is available on PyPI. You can install it with:
+
+```bash
+pip install kws-decoder
+```
+
+### (Optional) Run Sample Python Implementation Codes
+
+The original code was developed in Python. To run the original implementation, install the package with:
+
+```bash
+pip install kws-decoder[ext]
+```
+
+This command installs `pygtrie`, `torch`, and `tqdm`, which are necessary to run the original implementation of the beam search algorithm. After installing the dependencies, you can run the script with the original Python implementation located in the test folder, specifically "beam_search.py".
