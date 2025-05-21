@@ -1,1 +1,1 @@
-from .wrapper import KWSDecoder
+from .wrapper import KWSDecoder, Trie
