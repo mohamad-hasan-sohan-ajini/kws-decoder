@@ -1,5 +1,5 @@
-#ifndef KWS_DECODER_H
-#define KWS_DECODER_H
+#ifndef KWS_DECODER_CORE_H
+#define KWS_DECODER_CORE_H
 
 #include <vector>
 

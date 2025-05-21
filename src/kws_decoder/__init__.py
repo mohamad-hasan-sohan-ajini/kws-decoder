@@ -1,1 +1,1 @@
-from .wrapper import KWSDecoder, Trie
+from .kws_decoder import KWSDecoder, Trie
