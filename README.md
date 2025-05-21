@@ -54,6 +54,23 @@ probs = exp_logits / exp_logits.sum(axis=1, keepdims=True)
 decoder.search(probs)
 ```
 
+## Algorithm hyper parameters
+
+Here is the list of the most important and influential parameters of the decoder:
+
+`beam_width`: Number of candidate sequences (beams) kept at each decoding step. Larger values can improve accuracy at the cost of more computation and time.
+
+`beta`: Longer keywords naturally receive lower scores because more probabilities (each 0–1) are multiplied together. `beta` compensates for this length penalty: the score of a keyword is `p(keyword) × beta^len(keyword).`
+
+`min_keyword_score`: Minimum score a keyword must reach to be accepted as detected. Any (partial or complete) keyword below this threshold is pruned from the beam.
+
+`max_gap`: Maximum allowed gap, in timesteps, between successive detections of the same keyword. If two detections end within `max_gap`, they are merged into one occurrence whose score is the maximum of the two.
+
+`min_clip`: Floor value applied to every character probability to prevent underflow and improve numerical stability, increasing algorithm robustness. Note that setting this value too high increases the likelihood of false alarms.
+
+`top_n`: At each timestep only the top_n most-probable characters are expanded, limiting the branching factor of the beam search. It must be less than or equal to the number of characters.
+
+
 ### (Optional) Run Sample Python Implementation Codes
 
 The original code was developed in Python. To run the original implementation, install the package with:
