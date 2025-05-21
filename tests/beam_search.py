@@ -107,15 +107,3 @@ def prefix_beam_search(
         Pnb[t][O] = 0
         # print(f'timestep: {t}\nA_prev length: {len(A_prev)}\n{A_prev}\n')
     return result
-
-
-if __name__ == "__main__":
-    with open("resources/labels.json") as f:
-        labels = json.load(f)
-
-    data = torch.load("resources/output.pth")
-    data = data.squeeze().numpy()
-
-    keywords = ["think", "sport", "cheat", "kids", "remember"]
-    result = prefix_beam_search(labels, 0, data, keywords)
-    print(result)
