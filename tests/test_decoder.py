@@ -60,6 +60,8 @@ def test_kws_decoder(lang, label_file, data_file, keywords):
 
     # Compare keys
     assert set(ref_results.keys()) == set(results.keys())
+    for k, values in ref_results.items():
+        assert len(values) == len(results[k])
 
     # Optionally, compare the results more deeply
     # For demonstration, just print results
