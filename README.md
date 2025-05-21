@@ -1,75 +1,82 @@
 # Keyword Spotting Decoder
 
-Here is an implementation of KWS decoder in C++ language to speed up decoding in python using pybind.
+This repository provides a high-performance implementation of a Keyword Spotting (KWS) decoder in C++, designed to accelerate decoding in Python via pybind11.
 
-## How to compile
-A g++ compiler is needed for compiling c++ codes. It can be installed with installing build-essential as follow: <br>
-**ubuntu**
-```bash
-sudo apt-get install build-essential
-```
+KWS is essentially a streamlined beam search algorithm that looks for specified keywords directly in the output of an acoustic model (AM).  For example, consider the output from an acoustic model for the WAV file "tests/data/George_crop2.wav", where the speaker says:
+"AT ANY SECOND AND JUST GO AND THEN WATCH EVERYBODY'S MOUTH DROP I WILL NOT BE OVER"
 
-You need to have python3 installed. The requirements can be installed with pip as follow:
+![Sample acoustic model output](tests/data/output.png)
 
->### (Optional) run sample python codes
->If you want to run the sample codes available here, you need to install `pygtrie`, `torch`, `tqdm` using pip: <br>
-> `pip install pygtrie, torch, tqdm`
+The image above shows the first few timesteps of the acoustic model's output for the given text (for clarity).
 
+There are two main approaches to searching for specific keywords in audio:
+1. **Transcribe the entire audio**: Convert all spoken words to text, then search for your keywords in the transcription.
+2. **Direct keyword search in the acoustic model output**: Search for keywords directly in the AM output.
 
-### Python library requirements
-For compiling the c++ codes and building python packages you need to install pybind using pip:
-<br>`pip install pybind11`
+The first approach is prone to errors due to the influence of the language model (LM) during ASR decoding. The LM may alter the output to form more probable sentences, potentially causing actual spoken keywords to be missed or replaced with other words.
 
-### Complite c++ codes and make as python callable code
-```bash
-cd src
-g++ -O3 -Wall -shared -std=c++11 -fPIC $(python3 -m pybind11 --includes) node.cpp trie.cpp counter.cpp kws_decoder.cpp wrapper.cpp -o wrapper$(python3-config --extension-suffix)
-```
-### Use python build wrapper in your codes
+KWS addresses this issue by searching for your desired keywords directly in the acoustic model output, bypassing the language model and reducing the chance of missing keywords.
 
-copy `wrapper.*.so` file in running directory and use it as follow:
+## Installation
 
-`from wrapper import KWSDecoder`
-
-## How to test
-
-Trie test:
+The module is available on PyPI. You can install it with:
 
 ```bash
-python3 trie_test.py
+pip install kws-decoder
 ```
 
-And decoder test:
+## Usage example
+
+the following code shows a simple example that this module could be used:
+
+```python
+import numpy as np
+from kws_decoder import KWSDecoder
+
+labels = ["-", "|", "A", "B"]
+blank_index = 0
+decoder = KWSDecoder(labels, blank_index)
+
+# you can set/get decoder parameters using setter/getter functions
+decoder.set_beam_width(128)
+decoder.set_beta(1.05)
+
+# don't forget to add keywords to the decoder
+keywords = ["AA", "AB"]
+decoder.add_words(keywords)
+
+# create a dummy am output
+logits = np.random.randn(1000, 4).astype(np.float32)
+exp_logits = np.exp(logits - logits.max(axis=1, keepdims=True))
+probs = exp_logits / exp_logits.sum(axis=1, keepdims=True)
+
+# then you can search through AM output
+decoder.search(probs)
+```
+
+## Algorithm hyper parameters
+
+Here is the list of the most important and influential parameters of the decoder:
+
+`beam_width`: Number of candidate sequences (beams) kept at each decoding step. Larger values can improve accuracy at the cost of more computation and time.
+
+`beta`: Longer keywords naturally receive lower scores because more probabilities (each 0–1) are multiplied together. `beta` compensates for this length penalty: the score of a keyword is `p(keyword) × beta^len(keyword).`
+
+`min_keyword_score`: Minimum score a keyword must reach to be accepted as detected. Any (partial or complete) keyword below this threshold is pruned from the beam.
+
+`max_gap`: Maximum allowed gap, in timesteps, between successive detections of the same keyword. If two detections end within `max_gap`, they are merged into one occurrence whose score is the maximum of the two.
+
+`min_clip`: Floor value applied to every character probability to prevent underflow and improve numerical stability, increasing algorithm robustness. Note that setting this value too high increases the likelihood of false alarms.
+
+`top_n`: At each timestep only the top_n most-probable characters are expanded, limiting the branching factor of the beam search. It must be less than or equal to the number of characters.
+
+
+### (Optional) Run Sample Python Implementation Codes
+
+The original code was developed in Python. To run the original implementation, install the package with:
 
 ```bash
-python decoder_test.py
+pip install kws-decoder[ext]
 ```
 
----
-**NOTE**
-
-The commands needed to the compilation and testing modules is placed in `compile.sh`.
-
----
-
-## Compile with make file
-
-After installing PyBind11 using pip, locate the configuration file by running the following command:
-
-```
-find /path/to/venv -name "pybind11Config.cmake"
-```
-
-Next, create a build directory and navigate into it. While inside the build directory, run:
-
-```bash
-cmake -Dpybind11_DIR=/output/of/above/command/till/pybind11/folder -DPYTHON_VERSION=3.11 ..
-```
-
-Finally, to build the package, execute:
-
-```bash
-make
-```
-
-You will find the Python package in the build directory.
+This command installs `pygtrie`, `torch`, and `tqdm`, which are necessary to run the original implementation of the beam search algorithm. After installing the dependencies, you can run the script with the original Python implementation located in the test folder, specifically "beam_search.py".
