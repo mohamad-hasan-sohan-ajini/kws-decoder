@@ -2,7 +2,7 @@
 
 This repository provides a high-performance implementation of a Keyword Spotting (KWS) decoder in C++, designed to accelerate decoding in Python via pybind11.
 
-KWS is essentially a streamlined beam search algorithm that looks for specified keywords directly in the output of an acoustic model (AM). For example, consider the output from an acoustic model for a WAV file where the speaker says:
+KWS is essentially a streamlined beam search algorithm that looks for specified keywords directly in the output of an acoustic model (AM).  For example, consider the output from an acoustic model for the WAV file "tests/data/George_crop2.wav", where the speaker says:
 "AT ANY SECOND AND JUST GO AND THEN WATCH EVERYBODY'S MOUTH DROP I WILL NOT BE OVER"
 
 ![Sample acoustic model output](tests/data/output.png)
