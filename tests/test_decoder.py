@@ -44,7 +44,7 @@ def test_kws_decoder(lang, label_file, data_file, keywords):
     with open(label_path, encoding="utf-8") as f:
         labels = json.load(f)
 
-    data = torch.load(data_path)
+    data = torch.load(data_path, weights_only=True)
     data = data.squeeze().numpy()
 
     if lang == "ENGLISH":
