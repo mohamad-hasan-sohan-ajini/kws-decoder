@@ -80,3 +80,14 @@ pip install kws-decoder[ext]
 ```
 
 This command installs `pygtrie`, `torch`, and `tqdm`, which are necessary to run the original implementation of the beam search algorithm. After installing the dependencies, you can run the script with the original Python implementation located in the test folder, specifically "beam_search.py".
+
+
+# Testing
+
+After installing the module, you can run unit tests using `pytest`:
+
+```bash
+pytest
+```
+
+It runs two tests written in Persian and English to ensure everything works as expected.
