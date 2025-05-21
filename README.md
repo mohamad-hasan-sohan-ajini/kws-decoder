@@ -25,6 +25,35 @@ The module is available on PyPI. You can install it with:
 pip install kws-decoder
 ```
 
+## Usage example
+
+the following code shows a simple example that this module could be used:
+
+```python
+import numpy as np
+from kws_decoder import KWSDecoder
+
+labels = ["-", "|", "A", "B"]
+blank_index = 0
+decoder = KWSDecoder(labels, blank_index)
+
+# you can set/get decoder parameters using setter/getter functions
+decoder.set_beam_width(128)
+decoder.set_beta(1.05)
+
+# don't forget to add keywords to the decoder
+keywords = ["AA", "AB"]
+decoder.add_words(keywords)
+
+# create a dummy am output
+logits = np.random.randn(1000, 4).astype(np.float32)
+exp_logits = np.exp(logits - logits.max(axis=1, keepdims=True))
+probs = exp_logits / exp_logits.sum(axis=1, keepdims=True)
+
+# then you can search through AM output
+decoder.search(probs)
+```
+
 ### (Optional) Run Sample Python Implementation Codes
 
 The original code was developed in Python. To run the original implementation, install the package with:
