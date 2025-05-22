@@ -5,7 +5,7 @@ This repository provides a high-performance implementation of a Keyword Spotting
 KWS is essentially a streamlined beam search algorithm that looks for specified keywords directly in the output of an acoustic model (AM).  For example, consider the output from an acoustic model for the WAV file "tests/data/George_crop2.wav", where the speaker says:
 "AT ANY SECOND AND JUST GO AND THEN WATCH EVERYBODY'S MOUTH DROP I WILL NOT BE OVER"
 
-![Sample acoustic model output](tests/data/output.png)
+![Sample acoustic model output](https://raw.githubusercontent.com/yourusername/kws-decoder/main/tests/data/output.png)
 
 The image above shows the first few timesteps of the acoustic model's output for the given text (for clarity).
 
