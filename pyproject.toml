@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "kws-decoder"
-version = "0.1.2"
+version = "0.1.3"
 description = "Keyword spotting decoder built with PyBind11"
 authors = [
   {name = "Mohammad Hassan Sohan Ajini", email = "mohamad.hasan.sohan.ajini@gmail.com"},
