@@ -1,23 +1,26 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.15...4.2)
 project(kws_decoder LANGUAGES CXX)
 
-# Required for pybind11 to locate Python correctly
-find_package(pybind11 REQUIRED)
+# Use CMake's modern FindPython support through pybind11.
+set(PYBIND11_FINDPYTHON ON)
+find_package(pybind11 CONFIG REQUIRED)
 
-# List your C++ sources
-set(SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/node.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/trie.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/counter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/kws_decoder_core.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/kws_decoder.cpp
+pybind11_add_module(kws_decoder MODULE
+    cpp/node.cpp
+    cpp/trie.cpp
+    cpp/counter.cpp
+    cpp/kws_decoder_core.cpp
+    cpp/kws_decoder.cpp
 )
 
-# Build the pybind11 module
-pybind11_add_module(kws_decoder ${SOURCES})
+target_compile_features(kws_decoder PRIVATE cxx_std_17)
 
-# Optimization flags (optional, handled by most toolchains anyway)
-target_compile_options(kws_decoder PRIVATE -O3 -Wall -fPIC)
+if(MSVC)
+    target_compile_options(kws_decoder PRIVATE /W4)
+else()
+    target_compile_options(kws_decoder PRIVATE -Wall -Wextra -Wpedantic)
+endif()
 
-# Optional: Name the output module explicitly
-set_target_properties(kws_decoder PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/kws_decoder)
+# scikit-build-core packages the CMake install tree. Installing the extension
+# here avoids writing generated, Python-version-specific files into src/.
+install(TARGETS kws_decoder DESTINATION kws_decoder)
