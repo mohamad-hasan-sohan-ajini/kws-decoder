@@ -1,1 +1,18 @@
 *.pyc
+__pycache__/
+.pytest_cache/
+.venv/
+.vscode/
+
+# CMake and Python packaging output
+/build/
+/CMakeCache.txt
+/CMakeFiles/
+/cmake-build-*/
+/dist/
+/wheelhouse/
+*.egg-info/
+**/*.whl
+*.so
+*.pyd
+*.dylib
