@@ -1,5 +1,8 @@
 [build-system]
-requires = ["scikit-build-core", "pybind11"]
+requires = [
+  "scikit-build-core>=1.0",
+  "pybind11>=2.13.6",
+]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -21,6 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
   "Topic :: Multimedia :: Sound/Audio",
   "Topic :: Multimedia :: Sound/Audio :: Analysis",
@@ -29,7 +33,11 @@ classifiers = [
 
 [project.optional-dependencies]
 test = [
+  "numpy",
+  "pygtrie",
   "pytest",
+  "torch",
+  "tqdm",
 ]
 
 ext = [
@@ -42,3 +50,14 @@ ext = [
 Homepage = "https://github.com/mohamad-hasan-sohan-ajini/kws-decoder"
 Repository = "https://github.com/mohamad-hasan-sohan-ajini/kws-decoder"
 Issues = "https://github.com/mohamad-hasan-sohan-ajini/kws-decoder/issues"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+wheel.packages = ["src/kws_decoder"]
+cmake.build-type = "Release"
+
+# cibuildwheel is intended for release builds in CI. A compiled extension needs
+# a separate wheel for every supported Python/OS/architecture combination.
+[tool.cibuildwheel]
+build = "cp39-* cp310-* cp311-* cp312-* cp313-*"
+test-command = "python -c \"from kws_decoder import KWSDecoder, Trie\""
