@@ -25,6 +25,35 @@ The module is available on PyPI. You can install it with:
 pip install kws-decoder
 ```
 
+## Build from source
+
+Building from source is usually a single command. You need Python 3.9 or newer and a C++17-compatible compiler. From the project directory, run:
+
+```bash
+python -m pip install .
+```
+
+This installs the package and handles the compilation automatically.
+
+For development, use an editable install:
+
+```bash
+python -m pip install --editable .
+```
+
+After changing the C++ code, run the editable-install command again to rebuild the extension.
+
+### Create a wheel (optional)
+
+If you need a wheel that can be installed later, run:
+
+```bash
+python -m pip install --upgrade build
+python -m build --wheel
+```
+
+The wheel will be created in `dist/` and will match the Python version and platform used to build it.
+
 ## Usage example
 
 the following code shows a simple example that this module could be used:
