@@ -67,6 +67,6 @@ def test_kws_decoder(lang, label_file, data_file, keywords):
     # For demonstration, just print results
     print(f"\n########## {lang} ##########")
     print("Reference result:")
-    print(json.dumps(ref_results, indent=4, ensure_ascii=False))
+    print(json.dumps(ref_results, indent=4, ensure_ascii=False, default=float))
     print("C++ result:")
-    print(json.dumps(results, indent=4, ensure_ascii=False))
+    print(json.dumps(results, indent=4, ensure_ascii=False, default=float))
